@@ -1,5 +1,5 @@
 export const doctorProfile = {
-  name: 'Aditya Sharma',
+  name: 'Dummy',
   qualification: 'BVSc & AH, MVSc',
   specialization: 'Small Animal Surgery',
   clinic: 'WagFu Veterinary Center',
