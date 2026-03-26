@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Forum&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --navy: #040194;
+  --blue: #3431d4;
+  --mid: #7f7ed9;
+  --light: #9796eb;
+  --bg: #f4f4fc;
+  --bg2: #eaeaf6;
+  --white: #ffffff;
+  --text-primary: #040194;
+  --text-secondary: #3431d4;
+  --text-muted: #6c6ac1;
+  font-family: 'Outfit', 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--text-primary);
+  background-color: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  min-width: 320px;
+  background: var(--bg);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
