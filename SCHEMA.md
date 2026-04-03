@@ -126,15 +126,3 @@ Used for client-facing identity. Unlike internal UUIDs, these are reconstructabl
 - **Example**: `DOC-2026-00012`
 
 ---
-
-## 6. Logical Audit & Programmatic Notes
-
-> [!IMPORTANT]
-> **Observation 1: Relational Redundancy**  
-> You have `pet_ids` as an array in `Pet_Owner` AND `owner_id` in `Pets`. In a relational database, you should pick one source of truth (usually `owner_id` in `Pets`) to avoid desync. If using PostgreSQL, favor the Foreign Key approach.
->
-> **Observation 2: ID Slugs**  
-> Your ID Format (§5.1) used `PET` in some earlier notes but `PW` (Pet Owner) in others. I have standardized on `PW` for owners to match your User Types.
->
-> **Observation 3: Data Precision**  
-> `Height` and `Weight` are marked as `Float`. Ensure your FastAPI models use `confloat` or `Decimal` if precision is critical for medical dosages.
