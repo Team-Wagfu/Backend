@@ -40,7 +40,7 @@ Stores individual pet profiles.
 
 ## 3. Profile Extension Tables (Derived Entities)
 
-### 3.1 Pet_Owner
+### 3.1 Pet_Owner (PW)
 Extends base `Users` for customers.
 - `user_id` (**UUID**): Foreign Key (Users).
 - `owner_id` (**String**): Formatted ID (PW-slug).
@@ -64,10 +64,9 @@ Logistics and mobile response units.
 Specialized medical professionals.
 - `user_id` (**UUID**): Foreign Key (Users).
 - `doc_id` (**String**): Formatted ID (DOC-slug).
-- `clinic_name` (**String**): Registered clinic.
+- `clinic_ids` (**Array/Text**): Reference to `Clinics`, can be multiple.
 - `specialization` (**String**): Medical focus area.
 - `experience` (**Integer**): Years in practice.
-- `availability` (**JSONB**): Complex schedule mapping.
 - `rating` (**Float**): [0.0-10.0] aggregated score.
 - `reviews` (**JSONB**): Array of review objects `{rating, comment}`.
 
@@ -77,6 +76,40 @@ Internal management and operations.
 - `admin_id` (**String**): Formatted ID (ADM-slug).
 - `role` (**String**): Permission level (Master, Support, Moderator).
 - `permissions` (**JSONB**): Specific action scopes.
+
+### 3.5 Pharmaceuticals (PH)
+Location and contact details of Pharmaceutical shops.
+- `user_id` (**UUID**): Foreign Key (Users).
+- `shop_id` (**String**): Formatted ID (PH-slug).
+- `license_no` (**String**): License number of the shop.
+- `name` (**String**): Name of the shop.
+- `owner_name` (**String**): Name of the owner.
+- `contact` (**String**): Contact number.
+- `location` (**JSONB**): Geo-coordinates or address.
+- `rating` (**Float**): [0.0-10.0] aggregated score.
+- `reviews` (**JSONB**): Array of review objects `{rating, comment}`.
+- `level` (**Integer**): [1-5] Capacity/Priority scale. (1=low, 5=high)
+- `verified` (**Boolean**): Whether the shop is verified, False unless explicitly marked as verified.
+
+> [!NOTE] The license number of the shop is very important, it is used to verify the shop and to ensure that the shop is legitimate.
+
+### 3.6 Clinics (CLN)
+Information about clinics and their features, location, availability, etc.
+- `clinic_id` (**String**): Formatted ID (CLN-slug).
+- `clinic_name` (**String**): Name of the clinic.
+- `location` (**JSONB**): Geo-coordinates or address.
+- `facilities` (**Array/String**): Array of facility_id, references `Facilities`.
+- `rating` (**Float**): [0.0-10.0] aggregated score.
+- `reviews` (**Array/JSONB**): Array of review objects `{rating, comment}`.
+
+> [!NOTE] Doctor <-> Clinic is a many-to-many relationship. Mapping implied through clinic_id
+
+### 3.7 Facilities (FAC)
+List of general facilites that can be used to map to clinics rather than having to store names as is.
+- `facility_id` (**String**): Formatted ID (FAC-slug).
+- `facility_name` (**String**): Name of the facility.
+- `facility_description` (**String**): Description of the facility.
+- `facility_type` (**String**): Type of the facility, general categorization. *eg. surgery, x-ray, ultrasound, laboratory, grooming, boarding, training, other.*
 
 ---
 
@@ -121,8 +154,6 @@ Internal management and operations.
 Used for client-facing identity. Unlike internal UUIDs, these are reconstructable.
 **Format**: `[Type-Slug]-[Year]-[5-digit-Padded-Integer]`
 
-- **Slugs**: `PW`, `EME`, `DOC`, `ADM`.
+- **Slugs**: `PW`, `EME`, `DOC`, `ADM`, `PH`, `VET`.
 - **Validation**: Any 5-digit value of `00000` is invalid.
-- **Example**: `DOC-2026-00012`
-
----
+- **Example**: DOC-2026-00012, PW-2026-00012, EME-2026-00012, ADM-2026-00012, PH-2026-00012, VET-2026-00012
