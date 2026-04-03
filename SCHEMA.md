@@ -25,16 +25,19 @@ The primary entry point for all system actors. Identifies the "Who".
 ### 2.2 Pets (Child Table)
 Stores individual pet profiles.
 - `pet_id` (**String**): Formatted Unique ID (See §5.1).
-- `owner_id` (**String**): Reference to `Pet_Owner`.
 - `name` (**String**): Pet name.
-- `age` (**Integer/Float**): Age of the pet.
+- `dob` (**Date**): Date of Birth of the pet.
 - `type` (**Enum**): Species classification (See §4.2).
 - `breed` (**String**): Specific breed from mapped options (See §4.3).
 - `color` (**String**): Primary visual color (See §4.4).
 - `weight` (**Float**): Weight in KG (decimal precision).
 - `height` (**Float**): Height in CM (decimal precision).
-- `vaccines` (**JSONB**): Array of vaccination records.
-- `medical_history` (**JSONB**): Structured medical logs.
+- `vaccines` (**JSONB**): Array of vaccination records, format `{vaccine_name: str, due_date: date, status: Status}`.
+- `medical_history` (**Array/Text**): references MedicalRecords, array of diagnosis_id.
+
+> [!IMPORTANT] 
+> - vaccine format needs refining #TODO
+> - medical_history format needs refining #TODO
 
 ---
 
@@ -111,6 +114,14 @@ List of general facilites that can be used to map to clinics rather than having 
 - `facility_description` (**String**): Description of the facility.
 - `facility_type` (**String**): Type of the facility, general categorization. *eg. surgery, x-ray, ultrasound, laboratory, grooming, boarding, training, other.*
 
+### 3.8 MedicalRecords (MED)
+Details of each and every medical records.
+- `diagnosis_id` (**String**): Formatted ID (MED-slug).
+- `doctor_id` (**String**): Reference to `Doctors`.
+- `notes` (**String**): Notes of the diagnosis.
+- `diagnosis` (**String**): Diagnosis of the pet.
+- `date` (**Date**): Date of the diagnosis.
+
 ---
 
 ## 4. Reference Enums & Mappings
@@ -120,6 +131,7 @@ List of general facilites that can be used to map to clinics rather than having 
 - `emergency` (Logistics/Mobile Units)
 - `docs` (Medical/Clinics)
 - `admin` (System Staff)
+- `pharmaceuticals` (Pharmaceutical Shops)
 
 ### 4.2 Pet Species
 - `DOG`, `CAT`, `BRD` (Bird), `FIH` (Fish), `REP` (Reptile), `RBT` (Rabbit), `OTH` (Other).
@@ -154,6 +166,6 @@ List of general facilites that can be used to map to clinics rather than having 
 Used for client-facing identity. Unlike internal UUIDs, these are reconstructable.
 **Format**: `[Type-Slug]-[Year]-[5-digit-Padded-Integer]`
 
-- **Slugs**: `PW`, `EME`, `DOC`, `ADM`, `PH`, `VET`.
+- **Slugs**: `PW`, `EME`, `DOC`, `ADM`, `PH`, `VET`, `CLN`, `FAC`.
 - **Validation**: Any 5-digit value of `00000` is invalid.
-- **Example**: DOC-2026-00012, PW-2026-00012, EME-2026-00012, ADM-2026-00012, PH-2026-00012, VET-2026-00012
+- **Example**: DOC-2026-00012, PW-2026-00012, EME-2026-00012, ADM-2026-00012, PH-2026-00012, VET-2026-00012, CLN-2026-00012, FAC-2026-00012
