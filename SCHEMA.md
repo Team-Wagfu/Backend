@@ -18,13 +18,11 @@ The Wagfu database follows a **Base Identity + Profile Extension** pattern.
 The primary entry point for all system actors. Identifies the "Who".
 - `user_id` (**UUID**): Primary Key.
 - `type` (**Enum**): `UserType` (See §4.1).
-- `email` (**String**): Unique.
-- `password_hash` (**String**): Secure storage.
-- `created_at` (**Timestamp**): Record creation.
+- `display_name` (**String**): Display name for the user.
 
 ### 2.2 Pets (Child Table)
 Stores individual pet profiles.
-- `pet_id` (**String**): Formatted Unique ID (See §5.1).
+- `pet_id` (**String**): Formatted Unique ID (See §5.1). (slug PET)
 - `name` (**String**): Pet name.
 - `dob` (**Date**): Date of Birth of the pet.
 - `type` (**Enum**): Species classification (See §4.2).
@@ -47,7 +45,6 @@ Stores individual pet profiles.
 Extends base `Users` for customers.
 - `user_id` (**UUID**): Foreign Key (Users).
 - `owner_id` (**String**): Formatted ID (PW-slug).
-- `name` (**String**): Full name.
 - `location` (**JSONB**): Geo-coordinates or address.
 - `pet_ids` (**JSONB**): List of associated `pet_id` strings.
 
@@ -55,11 +52,11 @@ Extends base `Users` for customers.
 Logistics and mobile response units.
 - `user_id` (**UUID**): Foreign Key (Users).
 - `eme_id` (**String**): Formatted ID (EME-slug).
-- `name` (**String**): Service/Driver name.
 - `contact` (**String**): Emergency phone number.
 - `vehicle_type` (**Enum**): e.g., Ambulance, Transport.
 - `vehicle_reg_no` (**String**): License plate.
 - `vehicle_capacity` (**Integer**): Payload/Space.
+- `user_liscence` (**String**): License number of the user.
 - `level` (**Integer**): [1-5] Capacity/Priority scale.
 - `status` (**Enum**): `Available`, `Busy`, `Offline`.
 
@@ -83,7 +80,7 @@ Internal management and operations.
 ### 3.5 Pharmaceuticals (PH)
 Location and contact details of Pharmaceutical shops.
 - `user_id` (**UUID**): Foreign Key (Users).
-- `shop_id` (**String**): Formatted ID (PH-slug).
+- `shop_id` (**String**): Formatted ID (PHM-slug).
 - `license_no` (**String**): License number of the shop.
 - `name` (**String**): Name of the shop.
 - `owner_name` (**String**): Name of the owner.
@@ -166,6 +163,6 @@ Details of each and every medical records.
 Used for client-facing identity. Unlike internal UUIDs, these are reconstructable.
 **Format**: `[Type-Slug]-[Year]-[5-digit-Padded-Integer]`
 
-- **Slugs**: `PW`, `EME`, `DOC`, `ADM`, `PH`, `VET`, `CLN`, `FAC`.
+- **Slugs**: `PW`, `EME`, `DOC`, `ADM`, `PHM`, `VET`, `CLN`, `FAC`.
 - **Validation**: Any 5-digit value of `00000` is invalid.
 - **Example**: DOC-2026-00012, PW-2026-00012, EME-2026-00012, ADM-2026-00012, PH-2026-00012, VET-2026-00012, CLN-2026-00012, FAC-2026-00012
