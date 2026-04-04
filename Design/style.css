@@ -1,0 +1,79 @@
+:root {
+    --background-accent: #050505;
+    --foreground-accent: #ff7b00;
+    --text-accent: #fff;
+    --border-accent: #1313132f;
+    --link-foreground: var(--text-accent);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+.quicksand-normal {
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    position: relative; /* Enables positioning of the overlay */
+    background-color: black; /* Full canvas background color */
+}
+
+header {
+    width:100%;
+    border-bottom: var(--border-accent);
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    position:absolute;
+    top: 0;
+    font-size: 14px;
+}
+
+.active {
+    border-radius: 5px;
+    background-color: #ff7b00;
+}
+
+a {
+    color: var(--link-foreground);
+    text-decoration: none;
+}
+
+
+#back {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+
+    position: relative;
+    
+    /* justify-content: center; */;
+}
+
+#back #circle {
+    border-radius: 50%;
+
+    background: radial-gradient(circle, black, black, black, rgb(255,0,0,0.7), red, red, rgb(255,0,0,0.7), black, black);
+
+    height: 50vh;
+    width: 50vh;
+
+    position: absolute;
+    top: 25%;
+    left:-35%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}

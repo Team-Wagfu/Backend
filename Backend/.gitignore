@@ -1,0 +1,11 @@
+Runner/
+
+.env
+
+data/
+
+__pycache__/
+
+.venv
+
+tasks.md
