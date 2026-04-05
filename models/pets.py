@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Annotated, List, Union, Dict
+from typing import Annotated, List, Union, Dict, Optional
 from datetime import date
 from uuid import UUID
 
@@ -7,48 +7,50 @@ from uuid import UUID
 from .enums import PetType, Status, Breed, Colors
 from .vaccines import Vaccines
 
-'''
-[[Pet Model]]
-[Example]
+__all__ = [
+	"Pet","Pets",
+	"PetAddResponse"
+]
 
-// as per the initial documentation
-{
-    "id": "pet_001",
-    "passportId": "PW-2024-00142",
-    "name": "Luna",
-    "type": "Dog",
-    "breed": "Golden Retriever",
-    "dateOfBirth": "2021-03-15",
-    "color": "Golden",
-    "weight": 28.5,
-    "height": 58,
-    "ownerName": "Alex Johnson",
-    "healthScore": 87
-}
-
-// has been corrected of logical errors and changed to
-{
-	"pet_id": "PET-2024-12035",
-	"name": "Doby",
-	"dob": "2021-03-15",
-	"type": "dog",
-	"breed": "Golden Retriever",
-	"color": "Golden",
-	"weight": 50,
-	"height": 59,
-	"vaccines": {},
-	"medical_history": {}
-}
-
-[Description]
-return the pet details concerning a single pet, List[Pet] can be used to
-return the result as multiple related pets.
-'''
-
+# base models
 class Pet(BaseModel):
 
 	'''
-	
+	[[Pet Model]]
+	[Example]
+
+	// as per the initial documentation
+	{
+		"id": "pet_001",
+		"passportId": "PW-2024-00142",
+		"name": "Luna",
+		"type": "Dog",
+		"breed": "Golden Retriever",
+		"dateOfBirth": "2021-03-15",
+		"color": "Golden",
+		"weight": 28.5,
+		"height": 58,
+		"ownerName": "Alex Johnson",
+		"healthScore": 87
+	}
+
+	// has been corrected of logical errors and changed to
+	{
+		"pet_id": "PET-2024-12035",
+		"name": "Doby",
+		"dob": "2021-03-15",
+		"type": "dog",
+		"breed": "Golden Retriever",
+		"color": "Golden",
+		"weight": 50,
+		"height": 59,
+		"vaccines": {},
+		"medical_history": {}
+	}
+
+	[Description]
+	return the pet details concerning a single pet, List[Pet] can be used to
+	return the result as multiple related pets.
 	'''
 
 	pet_id: Annotated[
@@ -165,7 +167,23 @@ class Pet(BaseModel):
 	]
 
 # corresponding Collection type
-Pets = Annotated[
-	List[Pet]
-]
+class Multiple:
+	Pets = Annotated[
+		List[Pet]
+	]
 
+# response models
+class PetAddResponse(BaseModel):
+
+	status: Annotated[
+		Literal["success", "error"],
+		Field(
+			...,
+			description="status as if the operation(Addition) completed successfully or halted with error"
+		)
+	]
+
+	error: Optional[str]
+
+class PetGetResponse(BaseModel):
+	
