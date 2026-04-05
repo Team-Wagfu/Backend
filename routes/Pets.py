@@ -11,6 +11,7 @@ router = APIRouter(
 	summary="add and retrieve pet information",
 	dependencies=[
 		Depends(get_db),
+		Depends(protected_path)
 	]
 )
 

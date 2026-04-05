@@ -1,37 +1,45 @@
 from fastapi import Depends, HTTPException, status, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from ..db import supabase
+from .models import User
 
-# Security scheme to handle Bearer Token (JWT)
+__all__ = [
+    "protected_path"
+]
+
+# define security scheme for bearer token parsing
 security = HTTPBearer()
 
+# route protection dependencies
 async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
     """
-    Dependency to verify the user token with Supabase and return the user details.
-    Uses the provided Bearer token (JWT) from the Authorization header.
+    [[Get Current User]]
+    [Description]
+    Validates the bearer token (JWT) provided in request headers with Supabase.
+    If the token is valid, returns the corresponding User object.
+    Otherwise, raises a 401 Unauthorized exception.
     """
     token = credentials.credentials
     try:
-        # Check if the token is valid by getting the user.
-        # Supabase will throw an error if the token is invalid or expired.
+        # fetch user details directly from Supabase via token verification
         response = supabase.auth.get_user(token)
         user = response.user
         
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="User not found",
+                detail="User retrieval failed: No user found in Supabase response."
             )
         
-        # User is authenticated successfully.
+        # return user context upon successful authentication
         return user
     except Exception as e:
-        # If any error occurs, return 401 Unauthorized.
+        # token is invalid, expired, or something else went wrong
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f"Could not validate credentials: {str(e)}",
-            headers={"WWW-Authenticate": "Bearer"},
+            headers={"WWW-Authenticate": "Bearer"}
         )
 
-# Alias for 'protected_path' to be used in routes.
+# alias for 'protected_path' used across project routes
 protected_path = get_current_user

@@ -175,6 +175,8 @@ class Multiple:
 # response models
 class PetAddResponse(BaseModel):
 
+	'''return result of pet addition to the db'''
+
 	status: Annotated[
 		Literal["success", "error"],
 		Field(
@@ -183,7 +185,7 @@ class PetAddResponse(BaseModel):
 		)
 	]
 
-	error: Optional[str]
+	error: Optional[str] # only the firsy encountered error will be returned
 
 class PetGetResponse(BaseModel):
-	
+	pass

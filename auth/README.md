@@ -38,6 +38,19 @@ async def login(user_data: UserLogin):
 
 Both functions use pydantic models (`UserRegister` and `UserLogin`) to ensure correct input.
 
+## Session Management
+
+Supabase handles session management using JSON Web Tokens (JWT). When a user logs in, they receive an `access_token` and a `refresh_token`.
+
+### Client-Side Responsibilities
+1.  **Token Storage**: Securely store the `access_token` and `refresh_token`.
+2.  **Authorization Header**: Include the `access_token` in the `Authorization: Bearer <token>` header for all requests to protected routes.
+3.  **Token Refresh**: If the `access_token` expires, use the `refresh_token` to obtain a new one from Supabase. (Most Supabase client SDKs handle this automatically).
+
+### Backend Responsibilities
+1.  **Token Validation**: The `protected_path` dependency automatically validates the JWT with Supabase on every request.
+2.  **Logout**: The `logout_user()` function clears the session on the Supabase server.
+
 ## How to use `protected_path`
 
 To protect a route, add the `protected_path` dependency to your route function:
