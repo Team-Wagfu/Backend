@@ -173,19 +173,30 @@ class Multiple:
 	]
 
 # response models
-class PetAddResponse(BaseModel):
+class PetResponse:
 
-	'''return result of pet addition to the db'''
+	'''handle models for all the return types of pet related routes'''
 
-	status: Annotated[
-		Literal["success", "error"],
-		Field(
-			...,
-			description="status as if the operation(Addition) completed successfully or halted with error"
-		)
-	]
+	class PetAddResponse(BaseModel):
 
-	error: Optional[str] # only the firsy encountered error will be returned
+		'''return result of pet addition to the db'''
 
-class PetGetResponse(BaseModel):
-	pass
+		status: Annotated[
+			Literal["success", "error"],
+			Field(
+				...,
+				description="status as if the operation(Addition) completed successfully or halted with error"
+			)
+		]
+
+		error: Optional[str] # only the firsy encountered error will be returned
+
+	class PetGetResponse(BaseModel):
+		pass
+
+	class PetPatchResponse(BaseModel):
+		pass
+
+	class PetDeleteResponse(BaseModel):
+		pass
+

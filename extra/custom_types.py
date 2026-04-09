@@ -1,15 +1,13 @@
 from enum import Enum
 from pydantic import AfterValidator
-from typing import Annotated, List, Any, Literal, Dict
-from .enums import VehicleType, Liscence
-from datetime import dateteime, date
-from dateutil.relativedelta import relativedelta
+from typing import Annotated, Literal, Dict
+from .enums import VehicleType
 
 import re
 
 ## VALIDATORS
 
-def password_validator(v: str) -> str:
+def password_validator(pwd: str) -> str:
 
 	'''
 	password constraints includes,
@@ -19,6 +17,12 @@ def password_validator(v: str) -> str:
 			. contains atleast 1 digit				(0100)
 			. contains atleast 1 lowercase letter	(1000)
 	'''
+
+	class masks(int, Enum):
+		schar = 0b0001
+		uchar = 0b0010
+		dchar = 0b0100
+		lchar = 0b1000
 
 	if not pwd:
 		raise ValueError('Password cannot be empty')

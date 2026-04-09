@@ -1,3 +1,11 @@
+'''
+Pet handling routes
+> Handle pet addition
+> Handle pet Deletion
+> Handle Pet metadata modification
+> Handle pet retrieval
+'''
+
 from fastapi import APIRouter, HTTPException, Path, Body, Query, Depends
 from pydantic import Annotated, Field
 from typing import Dict, List
@@ -15,11 +23,16 @@ router = APIRouter(
 	]
 )
 
+
+# Pet Addition
 @router.post(
 	"/",
-    dependencies=[Depends(protected_path)]
+	dependencies=[Depends(protected_path)]
 )
-async def append_pet(user: Annotated[any, Depends(protected_path)]):
-	# add a new pet using authorized user context
-    pass
-	
+async def append_pet(
+	user: Annotated[
+		any, 
+		Depends(protected_path)
+	]
+):
+	return user
