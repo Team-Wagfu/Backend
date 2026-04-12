@@ -3,6 +3,10 @@ from typing import Annotated
 from pydantic import Field
 from supabase import Client
 
+# jwt verification
+import pyjwt
+
+
 # fastapi
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -11,12 +15,23 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from ..db import get_db, close_db
 
 # env
-from . import env
+from .. import env
+from os import getenv
 
-__all__ = []
+# try loading the variables and raise Exception 
+# if the environment variables are not loaded
+try:
+	JWT_SECRET=env["jwt_secret"]
+	JWT_PUBLIC_KEY=env["jwt_public_key"]
+except Exception as e:
+	raise EnvironmentError(f"Failed to load environment variables: {str(e)}")
+
+__all__ = [
+	"get_current_user", # export the protected path dependency
+]
 
 security_model = HTTPBearer(
-	description="JWT token",
+	description="JWT token bearer",
 	auto_error=True
 )
 
@@ -49,7 +64,8 @@ async def get_current_user(
 				detail="Failed to verify token",
 				headers={"WWW-Authenticate": "Bearer"} # include custom header in the resonse
 			)
-
+		
+		# return the user object
 		return response.user
 	except Exception as e:
 		# invalid token or other excpetion
@@ -73,4 +89,4 @@ def validate_jwt(
 		)
 	]
 ):
-	
+	pass
