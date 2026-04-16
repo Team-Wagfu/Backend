@@ -20,8 +20,8 @@ from typing import List, Union, Dict
 from uuid import UUID
 
 # self imports
-from ..extra.enums import UserType, Status
-from ..extra.custom_types import IDs, Location, Phone
+from ..extra.enums import UserType
+from ..extra.custom_types import IDs, Location, Phone, Vehicle
 
 
 # User model

@@ -1,16 +1,12 @@
-from functools import lru_cache
 from dotenv import load_dotenv
 from os import getenv
 from requests import get
 from typing import Dict, Any
 
-# use lru cache to avoid execution whener an import is initiated
-# preserves the variables fetched, in the first call
-@lru_cache
 def env_loader() -> Dict[str, Any]:
 	
 	# load variables from .env file
-	load_dotenv(".env.local")
+	load_dotenv(dotenv_path=f"{__package__}/.env.local")
 	
 	return {
 		"jwt_public_key_url": getenv("JWT_PUBLIC_KEY_URL"),
