@@ -4,8 +4,7 @@ from pydantic import Field
 from supabase import Client
 
 # jwt verification
-import pyjwt
-
+import jwt
 
 # fastapi
 from fastapi import Depends, HTTPException, status
@@ -17,6 +16,7 @@ from ..db import get_db, close_db
 # env
 from .. import env
 from os import getenv
+
 
 # try loading the variables and raise Exception 
 # if the environment variables are not loaded
@@ -87,6 +87,52 @@ def validate_jwt(
 			...,
 			description="JWT token"
 		)
-	]
+	],
+	db: Annotated[Client, Depends(get_db)]
 ):
-	pass
+	try:
+		# check the token legitimacy using jwt decode
+		# this checks the signature and expiration
+		# supabase by default uses HS256
+		payload = jwt.decode(
+			token,
+			JWT_SECRET,
+			algorithms=["HS256"],
+			options={"verify_aud": False}
+		)
+
+		# verify the token with supabase auth get_user
+		# this also checks if the user exists and is active
+		response = db.auth.get_user(token)
+
+		if not response.user:
+			raise HTTPException(
+				status_code=status.HTTP_401_UNAUTHORIZED,
+				detail="User not found or invalid token",
+				headers={"WWW-Authenticate": "Bearer"}
+			)
+
+		return {
+			"user": response.user,
+			"payload": payload,
+			"identity": response.user.id
+		}
+
+	except jwt.ExpiredSignatureError:
+		raise HTTPException(
+			status_code=status.HTTP_401_UNAUTHORIZED,
+			detail="Token has expired",
+			headers={"WWW-Authenticate": "Bearer"}
+		)
+	except jwt.InvalidTokenError:
+		raise HTTPException(
+			status_code=status.HTTP_401_UNAUTHORIZED,
+			detail="Invalid token signature",
+			headers={"WWW-Authenticate": "Bearer"}
+		)
+	except Exception as e:
+		raise HTTPException(
+			status_code=status.HTTP_401_UNAUTHORIZED,
+			detail=f"Authentication failed: {str(e)}",
+			headers={"WWW-Authenticate": "Bearer"}
+		)

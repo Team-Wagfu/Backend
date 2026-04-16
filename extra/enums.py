@@ -24,18 +24,18 @@ class Intervals(int, Enum):
 	# TODO
 
 class Vaccines:
-	class dVaccine:
+	class dVaccine(str, Enum):
 		rv="rabies"
 		dv="distemper"
 		cpv="canine parvovirus"
 		adv="canine adenovirus"
 		bb="bordetella bronchiseptica"
-		cpv="canine parainfluenza virus"
+		cpfv="canine parainfluenza virus"
 		lepto="leptospirosis"
 		lyme="lyme disease"
 		ci="canine influenza"
 
-	class cVaccine:
+	class cVaccine(str, Enum):
 		rabies="rabies"
 		fh1="feline herpesvirus-1"
 		fcv="feline calicivirus"
@@ -44,16 +44,16 @@ class Vaccines:
 		chf="chlamydophila felis"
 		bb="bordetella bronchiseptica"
 
-	class rVaccine:
+	class rVaccine(str, Enum):
 		rhdv="rabbit haemorrhagic disease virus"
 		myxo="myxomatosis"
 
-	class bVaccine:
+	class bVaccine(str, Enum):
 		pox="poxvirus"
 		para="paramyxovirus"
 		poly="polyomavirus"
 
-	class fVaccine:
+	class fVaccine(str, Enum):
 		aero="aeromonas"
 		vib="vibrio"
 		yr="yersinia ruckeri"
@@ -97,13 +97,13 @@ class Colors:
 		spotted='spotted'
 		neon='neon'
 	
-	class Reptile(str, Enum):
+	class reptile(str, Enum):
 		green='green'
 		brown='brown'
 		yellow='yellow'
 		grey='grey'
 
-	class Rabbit(str, Enum):
+	class rabbit(str, Enum):
 		white='white'
 		black='black'
 		grey='grey'
@@ -119,6 +119,24 @@ class Colors:
 class Breed: #TODO
 	class dog(str, Enum):
 		gr="golden retriever"
+	
+	class cat(str, Enum):
+		temp="temp"
+
+	class bird(str, Enum):
+		temp="temp"
+
+	class fish(str, Enum):
+		temp="temp"
+
+	class reptile(str, Enum):
+		temp="temp"
+
+	class rabbit(str, Enum):
+		temp="temp"
+
+	class other(str, Enum):
+		temp="temp"
 		
 class VehicleType(str, Enum): # TODO
 	ambulance="ambulance"

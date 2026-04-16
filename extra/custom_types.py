@@ -1,6 +1,6 @@
 from enum import Enum
 from pydantic import AfterValidator
-from typing import Annotated, Literal, Dict
+from typing import Annotated, Literal, Dict, Callable, TypedDict
 from .enums import VehicleType
 
 import re
@@ -71,7 +71,19 @@ def username_validator(v: str) -> str:
 	else:
 		return v
 
-def prefix(prefix: str)-> function:
+def prefix(prefix: str)-> Callable[[str], str]:
+
+	''' generates a validator function object
+	that validated if the given string satisfies the given conditions
+	along with the given prefix
+
+	Example:
+		prefix('abc') -> function
+
+		function: verifies if the passed string starts with the given prefix
+			and follows the given format prefix-[4 digit]-[5 digit]
+	'''
+
 	def validator(value: str) -> str|None:
 		if not value.startswith(prefix):
 			raise ValueError(f'Id should start with {prefix}')
@@ -113,7 +125,7 @@ def phone_number_validator(v: str) -> str:
 	# verify if the given phone number is valid or not
 	# checking thru patterns to see if any of it matches
 	
-	cleaned=re.sub(f'[\s\-$$$$]','',v)
+	cleaned=re.sub(r'[\s\-$$$$]','',v)
 
 	if not cleaned.isdigit():
 		raise ValueError("Phone number must contain only digits")
@@ -148,7 +160,13 @@ PasswordStr = Annotated[
 
 class IDs:
 
-	# ID Types
+	'''ID Types'''
+	
+	PetID=Annotated[
+		str,
+		AfterValidator(prefix('PET'))
+	]
+
 	PetOwnerID = Annotated[
 		str,
 		AfterValidator(prefix('PW'))
@@ -189,10 +207,6 @@ class IDs:
 		AfterValidator(prefix('MED'))
 	]
 
-	PetID=Annotated[
-		str,
-		AfterValidator(prefix('PET'))
-	]
 
 class Location:
 	GeoLocation = Annotated[
@@ -217,21 +231,22 @@ class Vehicle: # TODO
 
 	VehicleType = Annotated[
 		VehicleType,
+		AfterValidator(vehicle_number_validator)
 	]
 
-	VehicleCapacityMetrics = Annotated[
-		Dict[
-			Literal[
-				"Dimensions",
-				Dict[
-					Literal["height","width","length"],
-					float # in cm
-				]
-			],
-			Literal["Weight"],
-			float # in kg
-		]
-	]
+	# TODO, need to enforce TypedDict here.
+
+	# VehicleCapacityMetrics = Annotated[
+	# 	Dict[
+	# 		Literal["dim"],
+	# 		Dict[
+	# 			Literal["height","width","length"],
+	# 			float
+	# 		]
+	# 	],
+	# 	Literal["weight"],
+	# 	float
+	# ]
 
 	DriverLiscence = Annotated[
 		str,

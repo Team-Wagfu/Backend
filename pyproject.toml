@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wagfu-backend"
+version = "0.1.0"
+description = "Pet care and emergency response system"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "SomeStrangeUser" }]
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "pydantic",
+    "pydantic-settings",
+    "python-multipart",
+    "supabase",
+    "python-dotenv",
+    "requests",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "httpx"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["*"]
+
+[tool.fastapi]
+# Points the FastAPI extension to your application.
+# If your workspace root is the 'Backend' folder, use "main:app".
+# If you open from the parent 'Wagfu' folder, use "Backend.main:app".
+entrypoint = "main:app"
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
