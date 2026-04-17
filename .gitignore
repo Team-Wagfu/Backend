@@ -1,5 +1,5 @@
 # ignore virtual enironments
-Runner/
+venv/
 
 # ignore env files
 .env
@@ -11,12 +11,3 @@ data/
 
 # python cache
 __pycache__/
-
-
-# misc
-tasks.md
-
-# tests
-tests/
-tests
-routes/test_routes.py
